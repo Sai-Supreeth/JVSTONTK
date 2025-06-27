@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "JvsToNtkConverter/1.0.0": {
+        "runtime": {
+          "JvsToNtkConverter.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "JvsToNtkConverter/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
