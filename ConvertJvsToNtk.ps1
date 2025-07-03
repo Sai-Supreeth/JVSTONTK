@@ -2,7 +2,8 @@
 
 param(
     [string]$InputDir = "input",
-    [string]$OutputDir = "output"
+    [string]$OutputDir = "output",
+    [string]$Mode = "java2cs"  # or "jvs2ntk"
 )
 
 # Ensure output directory exists
@@ -46,8 +47,8 @@ if ($inputFiles.Count -eq 0) {
 
 foreach ($file in $inputFiles) {
     $outputFile = Join-Path $OutputDir ($file.BaseName + ".cs")
-    Write-Host "[Line-by-line] Converting: $($file.Name) -> $([System.IO.Path]::GetFileName($outputFile))" -ForegroundColor Cyan
-    & $ConverterExe $file.FullName $outputFile
+    Write-Host "[Mode: $Mode] Converting: $($file.Name) -> $([System.IO.Path]::GetFileName($outputFile))" -ForegroundColor Cyan
+    & $ConverterExe $Mode $file.FullName $outputFile
 }
 
 Write-Host "Conversion complete. Output .cs files are in: $OutputDir" -ForegroundColor Green 

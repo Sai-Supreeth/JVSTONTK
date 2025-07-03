@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JvsToNtkConverter")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+195970e7e0e7b428496c791975b0a749690bd725")]
 [assembly: System.Reflection.AssemblyProductAttribute("JvsToNtkConverter")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JvsToNtkConverter")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
