@@ -6,15 +6,15 @@ class JvsToNtkConverter
 {
     static void Main(string[] args)
     {
-        if (args.Length < 3)
+        if (args.Length < 2)
         {
-            Console.WriteLine("Usage: JvsToNtkConverter.exe <mode: java2cs|jvs2ntk> <inputFile> <outputCsFile>");
+            Console.WriteLine("Usage: JvsToNtkConverter.exe [jvs2ntk] <inputFile> <outputCsFile>");
             return;
         }
 
-        string mode = args[0].ToLower();
-        string inputPath = args[1];
-        string outputPath = args[2];
+        string mode = (args[0].ToLower() == "jvs2ntk") ? "jvs2ntk" : "java2cs";
+        string inputPath = (mode == "jvs2ntk") ? args[1] : args[0];
+        string outputPath = (mode == "jvs2ntk") ? args[2] : args[1];
 
         if (!File.Exists(inputPath))
         {
@@ -31,7 +31,7 @@ class JvsToNtkConverter
                 {
                     "java2cs" => ConvertJavaToCSharp(line),
                     "jvs2ntk" => ConvertJvsToNtk(line),
-                    _ => throw new ArgumentException("Invalid mode. Use java2cs or jvs2ntk.")
+                    _ => throw new ArgumentException("Invalid mode. Use jvs2ntk for JVS-to-NTK conversion.")
                 };
                 if (!string.IsNullOrWhiteSpace(convertedLine))
                     writer.WriteLine(convertedLine);
@@ -41,17 +41,59 @@ class JvsToNtkConverter
         Console.WriteLine($"C# file written to: {outputPath}");
     }
 
-    // Java to C# conversion logic (expand as needed)
+    // Expanded Java to C# conversion logic
     static string ConvertJavaToCSharp(string line)
     {
-        // Example: import to using, ArrayList to List, System.out.println to Console.WriteLine, etc.
-        line = Regex.Replace(line, @"import java\.util\.ArrayList;", "using System.Collections.Generic;");
-        line = Regex.Replace(line, @"import java\.util\.List;", "using System.Collections.Generic;");
+        // Data Types & Primitives
+        line = Regex.Replace(line, @"\bint\b", "int");
+        line = Regex.Replace(line, @"\blong\b", "long");
+        line = Regex.Replace(line, @"\bfloat\b", "float");
+        line = Regex.Replace(line, @"\bdouble\b", "double");
+        line = Regex.Replace(line, @"\bboolean\b", "bool");
+        line = Regex.Replace(line, @"\bchar\b", "char");
+        line = Regex.Replace(line, @"\bbyte\b", "byte");
+        line = Regex.Replace(line, @"\bshort\b", "short");
+        line = Regex.Replace(line, @"\bInteger\b", "int");
+        line = Regex.Replace(line, @"\bDouble\b", "double");
+        line = Regex.Replace(line, @"\bBoolean\b", "bool");
+        line = Regex.Replace(line, @"\bLong\b", "long");
+        line = Regex.Replace(line, @"\bFloat\b", "float");
+        line = Regex.Replace(line, @"\bCharacter\b", "char");
+        line = Regex.Replace(line, @"\bString\b", "string");
+
+
+
+        // Collections / Generics
+        line = Regex.Replace(line, @"ArrayList<([\w<>]+)>", "List<$1>");
+        line = Regex.Replace(line, @"LinkedList<([\w<>]+)>", "LinkedList<$1>");
+        line = Regex.Replace(line, @"HashMap<([\w<>]+),\s*([\w<>]+)>", "Dictionary<$1, $2>");
+        line = Regex.Replace(line, @"Hashtable<([\w<>]+),\s*([\w<>]+)>", "Hashtable");
+        line = Regex.Replace(line, @"HashSet<([\w<>]+)>", "HashSet<$1>");
+        line = Regex.Replace(line, @"TreeMap<([\w<>]+),\s*([\w<>]+)>", "SortedDictionary<$1, $2>");
+        line = Regex.Replace(line, @"Vector<([\w<>]+)>", "List<$1>");
+        line = Regex.Replace(line, @"Stack<([\w<>]+)>", "Stack<$1>");
+        line = Regex.Replace(line, @"Queue<([\w<>]+)>", "Queue<$1>");
+        line = Regex.Replace(line, @"PriorityQueue<([\w<>]+)>", "SortedSet<$1>");
+        line = Regex.Replace(line, @"Collections\.sort\(([^)]+)\)", "$1.Sort()");
+        line = Regex.Replace(line, @"Arrays\.asList\(([^)]+)\)", "new List<$1>()");
+        line = Regex.Replace(line, @"Arrays\.copyOf\(([^,]+),\s*([^)]+)\)", "Array.Copy($1, $2)");
+
+        // Imports to usings
+        line = Regex.Replace(line, @"import java\.util\..*;", "using System.Collections.Generic;");
         line = Regex.Replace(line, @"import java\.io\..*;", "using System.IO;");
+        line = Regex.Replace(line, @"import java\.time\..*;", "using System;");
+        line = Regex.Replace(line, @"import java\.math\..*;", "using System;");
+        line = Regex.Replace(line, @"import java\.sql\..*;", "using System.Data;");
+        line = Regex.Replace(line, @"import java\.lang\..*;", "using System;");
         line = Regex.Replace(line, @"import .+;", ""); // Remove other imports
-        line = Regex.Replace(line, @"ArrayList<(\w+)>", "List<$1>");
+
+        // System.out.println to Console.WriteLine
         line = Regex.Replace(line, @"System\.out\.println", "Console.WriteLine");
+        line = Regex.Replace(line, @"System\.out\.print", "Console.Write");
+
+        // Main method signature
         line = Regex.Replace(line, @"public static void main\s*\(\s*String\[\]\s*args\s*\)", "public static void Main(string[] args)");
+
         // Add more idiomatic conversions as needed
         return line;
     }
